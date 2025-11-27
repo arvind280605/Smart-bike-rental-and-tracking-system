@@ -105,21 +105,27 @@ Smart bike rental and tracking system/
  🚀 Run Locally (Development Setup)
 
 1️⃣ Clone the repository
+
 git clone https://github.com/YOUR-USERNAME/Smart-Bike-Rental-System.git
+
 cd Smart-Bike-Rental-System
 
 2️⃣ Install dependencies
+
 npm install
 
 3️⃣ Configure MongoDB
 
 Update your MongoDB connection string in server.js:
+
 const uri = "your-mongodb-connection-string";
 
 4️⃣ Start the server
+
 node server.js
 
 5️⃣ Open in browser
+
 http://localhost:3000
 
 🌐 Deployment (Render)
