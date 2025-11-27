@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Bike Rental - Register</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0px 15px 35px rgba(0,0,0,0.2);
+      width: 100%;
+      max-width: 500px;
+      backdrop-filter: blur(10px);
+    }
+
+    .logo {
+      text-align: center;
+      font-size: 3em;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #2c3e50;
+      font-size: 1.8em;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #34495e;
+      font-size: 14px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e1e8ed;
+      border-radius: 10px;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+    }
+
+    input:focus, select:focus {
+      border-color: #667eea;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .password-container {
+      position: relative;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 1.2em;
+      user-select: none;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .btn-primary:disabled {
+      background: #95a5a6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-secondary {
+      width: 100%;
+      padding: 12px;
+      background: transparent;
+      color: #667eea;
+      font-size: 14px;
+      border: 2px solid #667eea;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+      background: #667eea;
+      color: white;
+    }
+
+    #message {
+      text-align: center;
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: bold;
+      display: none;
+    }
+
+    .success {
+      background: #d4edda;
+      color: #155724;
+      border: 2px solid #c3e6cb;
+      display: block;
+    }
+
+    .error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 2px solid #f5c6cb;
+      display: block;
+    }
+
+    .info-text {
+      text-align: center;
+      color: #7f8c8d;
+      font-size: 13px;
+      margin-top: 15px;
+    }
+
+    .required {
+      color: #e74c3c;
+    }
+
+    @media (max-width: 600px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+      
+      .container {
+        padding: 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">🚲</div>
+    <h2>Create Your Account</h2>
+    
+    <form id="registerForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label>User ID <span class="required">*</span></label>
+          <input type="number" id="userId" placeholder="Enter unique ID" required min="1">
+        </div>
+        
+        <div class="form-group">
+          <label>Full Name <span class="required">*</span></label>
+          <input type="text" id="name" placeholder="Enter your name" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Email Address <span class="required">*</span></label>
+        <input type="email" id="email" placeholder="example@email.com" required>
+      </div>
+
+      <div class="form-group">
+        <label>Phone Number <span class="required">*</span></label>
+        <input type="tel" id="phone" placeholder="+91 9876543210" required pattern="[0-9+\s\-()]+">
+      </div>
+
+      <div class="form-group">
+        <label>Password <span class="required">*</span></label>
+        <div class="password-container">
+          <input type="password" id="password" placeholder="Create a strong password" required minlength="6">
+          <span class="toggle-password" onclick="togglePassword()">👁️</span>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Bike ID <span class="required">*</span></label>
+          <input type="number" id="bikeId" placeholder="Enter bike ID" required min="1">
+        </div>
+
+        <div class="form-group">
+          <label>Duration (hrs) <span class="required">*</span></label>
+          <input type="number" id="duration" placeholder="Hours" required min="1" max="24">
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary" id="submitBtn">
+        Create Account
+      </button>
+      
+      <button type="button" class="btn-secondary" onclick="window.location.href='login.html'">
+        Already have an account? Login
+      </button>
+    </form>
+
+    <div id="message"></div>
+    
+    <p class="info-text">
+      By registering, you agree to our Terms & Conditions
+    </p>
+  </div>
+
+  <script>
+    const form = document.getElementById("registerForm");
+    const message = document.getElementById("message");
+    const submitBtn = document.getElementById("submitBtn");
+
+    // Toggle password visibility
+    function togglePassword() {
+      const passwordInput = document.getElementById("password");
+      const toggle = document.querySelector(".toggle-password");
+      
+      if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        toggle.textContent = "🙈";
+      } else {
+        passwordInput.type = "password";
+        toggle.textContent = "👁️";
+      }
+    }
+
+    // Form validation
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      
+      // Clear previous messages
+      message.style.display = 'none';
+      
+      // Get form values
+      const userId = form.userId.value.trim();
+      const name = form.name.value.trim();
+      const email = form.email.value.trim();
+      const phone = form.phone.value.trim();
+      const password = form.password.value;
+      const bikeId = form.bikeId.value.trim();
+      const duration = form.duration.value.trim();
+      
+      // VALIDATION 1: Check if all fields are filled
+      if (!userId || !name || !email || !phone || !password || !bikeId || !duration) {
+        message.className = "message error";
+        message.textContent = "❌ All fields are required!";
+        message.style.display = "block";
+        return;
+      }
+      
+      // VALIDATION 2: Email format validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        message.className = "message error";
+        message.textContent = "❌ Invalid email format! Please enter a valid email.";
+        message.style.display = "block";
+        return;
+      }
+      
+      // VALIDATION 3: Phone number validation (must be 10 digits)
+      const phoneRegex = /^[0-9]{10}$/;
+      const cleanPhone = phone.replace(/[\s\-\+()]/g, ''); // Remove spaces, +, -, ()
+      if (!phoneRegex.test(cleanPhone)) {
+        message.className = "message error";
+        message.textContent = "❌ Invalid phone number! Please enter a valid 10-digit phone number.";
+        message.style.display = "block";
+        return;
+      }
+      
+      // VALIDATION 4: Password strength validation
+      if (password.length < 8) {
+        message.className = "message error";
+        message.textContent = "❌ Password must be at least 8 characters long!";
+        message.style.display = "block";
+        return;
+      }
+      
+      // Check for special character
+      const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
+      if (!specialCharRegex.test(password)) {
+        message.className = "message error";
+        message.textContent = "❌ Password must include at least one special character (!@#$%^&* etc.)";
+        message.style.display = "block";
+        return;
+      }
+      
+      // Check for number
+      const numberRegex = /[0-9]/;
+      if (!numberRegex.test(password)) {
+        message.className = "message error";
+        message.textContent = "❌ Password must include at least one number!";
+        message.style.display = "block";
+        return;
+      }
+      
+      // Check for uppercase letter
+      const uppercaseRegex = /[A-Z]/;
+      if (!uppercaseRegex.test(password)) {
+        message.className = "message error";
+        message.textContent = "❌ Password must include at least one uppercase letter!";
+        message.style.display = "block";
+        return;
+      }
+      
+      // VALIDATION 5: User ID must be numeric and positive
+      if (isNaN(userId) || parseInt(userId) <= 0) {
+        message.className = "message error";
+        message.textContent = "❌ User ID must be a positive number!";
+        message.style.display = "block";
+        return;
+      }
+      
+      // VALIDATION 6: Bike ID validation
+      if (isNaN(bikeId) || parseInt(bikeId) <= 0) {
+        message.className = "message error";
+        message.textContent = "❌ Bike ID must be a positive number!";
+        message.style.display = "block";
+        return;
+      }
+      
+      // VALIDATION 7: Duration validation (1-24 hours)
+      if (isNaN(duration) || parseInt(duration) < 1 || parseInt(duration) > 24) {
+        message.className = "message error";
+        message.textContent = "❌ Duration must be between 1 and 24 hours!";
+        message.style.display = "block";
+        return;
+      }
+      
+      // Disable submit button to prevent double submission
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Creating Account...";
+      
+      // Collect form data
+      const data = {
+        userId: parseInt(userId),
+        name: name,
+        email: email,
+        phone: cleanPhone,
+        password: password,
+        bikeId: parseInt(bikeId),
+        duration: parseInt(duration)
+      };
+
+      try {
+        const res = await fetch("/register", {
+          method: "POST",
+          headers: { 
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+        
+        if (result.success) {
+          message.className = "message success";
+          message.textContent = "✅ " + result.message;
+          message.style.display = "block";
+          
+          // Reset form
+          form.reset();
+          
+          // Redirect to login after 2 seconds
+          setTimeout(() => {
+            window.location.href = "login.html";
+          }, 2000);
+          
+        } else {
+          message.className = "message error";
+          message.textContent = "❌ " + result.message;
+          message.style.display = "block";
+          
+          // Re-enable button
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Create Account";
+        }
+        
+      } catch (err) {
+        message.className = "message error";
+        message.textContent = "❌ Network Error: " + err.message;
+        message.style.display = "block";
+        
+        // Re-enable button
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Create Account";
+      }
+    });
+
+    // Real-time validation feedback
+    const inputs = document.querySelectorAll('input[required]');
+    inputs.forEach(input => {
+      input.addEventListener('blur', function() {
+        if (!this.validity.valid) {
+          this.style.borderColor = '#e74c3c';
+        } else {
+          this.style.borderColor = '#27ae60';
+        }
+      });
+      
+      input.addEventListener('input', function() {
+        if (this.validity.valid) {
+          this.style.borderColor = '#27ae60';
+        }
+      });
+    });
+
+    // Generate random User ID suggestion
+    document.getElementById('userId').placeholder = `Try: ${Math.floor(Math.random() * 9000) + 1000}`;
+  </script>
+</body>
+</html>

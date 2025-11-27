@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find Stations - Smart Bike Rental</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+    
+    .navbar {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #2c3e50;
+      cursor: pointer;
+    }
+    
+    .nav-btn {
+      padding: 8px 16px;
+      background: #95a5a6;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    
+    .nav-btn:hover {
+      background: #7f8c8d;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+    
+    .page-header {
+      text-align: center;
+      color: white;
+      margin-bottom: 2rem;
+    }
+    
+    .page-header h1 {
+      font-size: 2.5em;
+      margin-bottom: 0.5rem;
+    }
+    
+    .search-bar {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 1.5rem;
+      border-radius: 15px;
+      margin-bottom: 2rem;
+      display: flex;
+      gap: 1rem;
+    }
+    
+    .search-bar input {
+      flex: 1;
+      padding: 12px;
+      border: 2px solid #e1e8ed;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+    
+    .search-btn {
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    
+    .stations-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 2rem;
+    }
+    
+    .station-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    
+    .station-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .station-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    
+    .station-icon {
+      font-size: 3em;
+      margin-bottom: 0.5rem;
+    }
+    
+    .station-name {
+      font-size: 1.5em;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+    
+    .station-id {
+      opacity: 0.8;
+      font-size: 0.9em;
+    }
+    
+    .station-body {
+      padding: 1.5rem;
+    }
+    
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid #ecf0f1;
+    }
+    
+    .info-row:last-child {
+      border-bottom: none;
+    }
+    
+    .info-label {
+      color: #7f8c8d;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .info-value {
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    
+    .station-actions {
+      padding: 0 1.5rem 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    
+    .action-btn {
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .primary-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    
+    .primary-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    .secondary-btn {
+      background: white;
+      border: 2px solid #667eea;
+      color: #667eea;
+    }
+    
+    .secondary-btn:hover {
+      background: #f8f9fa;
+    }
+    
+    .stats-summary {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 2rem;
+      border-radius: 15px;
+      margin-bottom: 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+    }
+    
+    .stat-item {
+      text-align: center;
+    }
+    
+    .stat-icon {
+      font-size: 2.5em;
+      margin-bottom: 0.5rem;
+    }
+    
+    .stat-value {
+      font-size: 2em;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    
+    .stat-label {
+      color: #7f8c8d;
+      margin-top: 0.3rem;
+    }
+    
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal.active {
+      display: flex;
+    }
+    
+    .modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 20px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid #ecf0f1;
+    }
+    
+    .modal-title {
+      font-size: 1.8em;
+      color: #2c3e50;
+    }
+    
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 2em;
+      cursor: pointer;
+      color: #7f8c8d;
+      line-height: 1;
+    }
+    
+    .close-btn:hover {
+      color: #e74c3c;
+    }
+    
+    .bike-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .bike-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      background: #f8f9fa;
+      border-radius: 10px;
+      border-left: 4px solid #667eea;
+      margin-bottom: 0.5rem;
+    }
+    
+    .bike-item:hover {
+      background: #e9ecef;
+    }
+    
+    .bike-info {
+      flex: 1;
+    }
+    
+    .bike-name {
+      font-weight: bold;
+      color: #2c3e50;
+      font-size: 1.1em;
+    }
+    
+    .bike-id {
+      color: #7f8c8d;
+      font-size: 0.85em;
+      margin-top: 0.2rem;
+    }
+    
+    .bike-status {
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.85em;
+      font-weight: bold;
+      margin-right: 0.5rem;
+    }
+    
+    .bike-status.available {
+      background: #d4edda;
+      color: #155724;
+    }
+    
+    .bike-status.rented {
+      background: #f8d7da;
+      color: #721c24;
+    }
+    
+    .rent-bike-btn {
+      padding: 0.5rem 1rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 0.9em;
+    }
+    
+    .rent-bike-btn:hover {
+      transform: scale(1.05);
+    }
+    
+    .rent-bike-btn:disabled {
+      background: #95a5a6;
+      cursor: not-allowed;
+    }
+    
+    @media (max-width: 768px) {
+      .stations-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .station-actions {
+        grid-template-columns: 1fr;
+      }
+      
+      .stats-summary {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo" onclick="window.location.href='dashboard.html'">
+      🚲 Smart Bike Rental
+    </div>
+    <a href="dashboard.html" class="nav-btn">← Back to Dashboard</a>
+  </nav>
+
+  <div class="container">
+    <div class="page-header">
+      <h1>🗺️ Find Stations</h1>
+      <p>Locate the nearest bike station in your area</p>
+    </div>
+
+    <div class="search-bar">
+      <input type="text" id="searchInput" list="stationSuggestions" placeholder="🔍 Search by station name or location..." oninput="searchStations()">
+      <datalist id="stationSuggestions"></datalist>
+      <button class="search-btn" onclick="searchStations()">Search</button>
+    </div>
+
+    <div class="stats-summary">
+      <div class="stat-item">
+        <div class="stat-icon">🏢</div>
+        <div class="stat-value" id="totalStations">0</div>
+        <div class="stat-label">Total Stations</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon">🚲</div>
+        <div class="stat-value" id="totalBikes">0</div>
+        <div class="stat-label">Available Bikes</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon">📍</div>
+        <div class="stat-value" id="nearestStation">-</div>
+        <div class="stat-label">Nearest Station</div>
+      </div>
+    </div>
+
+    <div class="stations-grid" id="stationsContainer"></div>
+  </div>
+
+  <!-- Station Details Modal -->
+  <div class="modal" id="stationModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalStationName">Station Details</h2>
+        <button class="close-btn" onclick="closeStationModal()">×</button>
+      </div>
+      <div id="modalStationInfo"></div>
+      <div class="bike-list" id="modalBikesList"></div>
+    </div>
+  </div>
+
+  <script>
+    let allStations = [];
+    const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+
+    if (!user.userId) {
+      window.location.href = 'login.html';
+    }
+
+    // Load stations
+    async function loadStations() {
+      try {
+        const response = await fetch('/api/stations');
+        if (response.ok) {
+          allStations = await response.json();
+          console.log('✅ Stations loaded:', allStations);
+          
+          if (allStations.length === 0) {
+            document.getElementById('stationsContainer').innerHTML = `
+              <div style="grid-column: 1/-1; text-align: center; color: white; padding: 3rem;">
+                <h3>No Stations Found</h3>
+                <button onclick="loadStations()">🔄 Refresh</button>
+              </div>
+            `;
+          } else {
+            const datalist = document.getElementById('stationSuggestions');
+            datalist.innerHTML = allStations.map(s => 
+              `<option value="${s.NAME}">${s.NAME}</option>
+               <option value="${s.CITY}">${s.CITY}</option>`
+            ).join('');
+            
+            displayStations(allStations);
+            updateStats();
+          }
+        }
+      } catch (error) {
+        console.error('❌ Error:', error);
+      }
+    }
+
+    // Display stations - SHOWS ONLY AVAILABLE BIKES COUNT
+    function displayStations(stations) {
+      const container = document.getElementById('stationsContainer');
+      
+      container.innerHTML = stations.map(station => {
+        const stationId = station.STATION_ID;
+        const stationName = station.NAME;
+        const stationLocation = station.LOCATION || 'Location not available';
+        const stationCity = station.CITY || '';
+        let availableBikes = station.AVAILABLE_BIKES || 0;
+        
+        // Make sure available bikes is not negative
+        if (availableBikes < 0) availableBikes = 0;
+        
+        return `
+          <div class="station-card">
+            <div class="station-header">
+              <div class="station-icon">🏢</div>
+              <div class="station-name">${stationName}</div>
+              <div class="station-id">${stationCity}</div>
+            </div>
+            
+            <div class="station-body">
+              <div class="info-row">
+                <span class="info-label">📍 Location</span>
+                <span class="info-value">${stationLocation}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">🚲 Available Bikes</span>
+                <span class="info-value" style="color: ${availableBikes > 0 ? '#27ae60' : '#e74c3c'}; font-size: 1.3em;">
+                  ${availableBikes} bikes
+                </span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">⏰ Status</span>
+                <span class="info-value" style="color: #27ae60;">✅ Open 24/7</span>
+              </div>
+            </div>
+            
+            <div class="station-actions">
+              <button class="action-btn primary-btn" onclick="rentFromStation(${stationId})" ${availableBikes === 0 ? 'disabled style="background: #95a5a6;"' : ''}>
+                ${availableBikes > 0 ? '🚴 Rent Bike' : '❌ No Bikes'}
+              </button>
+              <button class="action-btn secondary-btn" onclick="viewDetails(${stationId})">
+                📋 View Bikes
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Search stations
+    function searchStations() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      if (!searchTerm) {
+        displayStations(allStations);
+        return;
+      }
+      
+      const filtered = allStations.filter(station => {
+        const name = (station.NAME || '').toLowerCase();
+        const location = (station.LOCATION || '').toLowerCase();
+        const city = (station.CITY || '').toLowerCase();
+        return name.includes(searchTerm) || location.includes(searchTerm) || city.includes(searchTerm);
+      });
+      
+      displayStations(filtered);
+    }
+
+    // Update statistics - SHOWS ONLY AVAILABLE BIKES TOTAL
+    function updateStats() {
+      const totalStations = allStations.length;
+      
+      // Sum ONLY available bikes across all stations
+      let totalBikes = allStations.reduce((sum, station) => {
+        let available = station.AVAILABLE_BIKES || 0;
+        if (available < 0) available = 0;
+        return sum + available;
+      }, 0);
+      
+      const nearestStation = allStations.length > 0 ? allStations[0].NAME : '-';
+      
+      document.getElementById('totalStations').textContent = totalStations;
+      document.getElementById('totalBikes').textContent = totalBikes;
+      document.getElementById('nearestStation').textContent = nearestStation;
+    }
+
+    // Rent from station
+    function rentFromStation(stationId) {
+      sessionStorage.setItem('selectedStation', stationId);
+      window.location.href = 'rent-bike.html';
+    }
+
+    // View station details - SHOWS ONLY AVAILABLE BIKES
+    async function viewDetails(stationId) {
+      const station = allStations.find(s => s.STATION_ID === stationId);
+      if (!station) {
+        alert('Station not found');
+        return;
+      }
+      
+      const stationName = station.NAME || 'Unknown Station';
+      const stationLocation = station.LOCATION || 'Location not available';
+      const availableBikes = station.AVAILABLE_BIKES || 0;
+      
+      document.getElementById('modalStationName').textContent = stationName;
+      
+      // Updated modal info - shows ONLY available bikes count
+      document.getElementById('modalStationInfo').innerHTML = `
+        <div style="margin-bottom: 1.5rem; padding: 1rem; background: #f8f9fa; border-radius: 10px;">
+          <p style="color: #7f8c8d; margin-bottom: 0.5rem;"><strong>📍 Location:</strong> ${stationLocation}</p>
+          <p style="color: #27ae60; font-weight: bold; font-size: 1.3rem;">
+            <strong>🚲 ${availableBikes} Bikes Available Now</strong>
+          </p>
+        </div>
+        <h3 style="color: #667eea; margin-bottom: 1rem;">Available Bikes:</h3>
+      `;
+      
+      try {
+        const response = await fetch('/api/bikes');
+        const allBikes = await response.json();
+        
+        // FILTER: Show ONLY bikes that are at THIS station AND available
+        const availableBikesAtStation = allBikes.filter(bike => 
+          bike.STATION_ID === stationId && (bike.IS_AVAILABLE === 1 || bike.IS_AVAILABLE === true)
+        );
+        
+        const bikesList = document.getElementById('modalBikesList');
+        
+        if (availableBikesAtStation.length === 0) {
+          bikesList.innerHTML = `
+            <div style="text-align: center; padding: 2rem; color: #7f8c8d;">
+              <div style="font-size: 3em; margin-bottom: 1rem;">🚲</div>
+              <p style="font-size: 1.1em;"><strong>No bikes available at this station</strong></p>
+              <p style="margin-top: 0.5rem;">Please check other nearby stations</p>
+            </div>
+          `;
+        } else {
+          bikesList.innerHTML = availableBikesAtStation.map(bike => {
+            const displayName = bike.MODEL || `Bike #${bike.BIKE_ID}`;
+            const bikeType = bike.TYPE || 'Standard';
+            
+            return `
+              <div class="bike-item">
+                <div class="bike-info">
+                  <div class="bike-name">${displayName}</div>
+                  <div class="bike-id">Bike ID: #${bike.BIKE_ID} • ${bikeType}</div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                  <span class="bike-status available">✅ Available</span>
+                  <button class="rent-bike-btn" onclick="rentBikeFromModal(${bike.BIKE_ID}, '${displayName}', ${stationId})">
+                    Rent Now
+                  </button>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+        
+        document.getElementById('stationModal').classList.add('active');
+        
+      } catch (error) {
+        console.error('Error loading bikes:', error);
+        alert('Error loading bike details. Please check if server is running.');
+      }
+    }
+
+    // Rent bike from modal
+    function rentBikeFromModal(bikeId, bikeName, stationId) {
+      closeStationModal();
+      sessionStorage.setItem('selectedBike', bikeId);
+      sessionStorage.setItem('selectedStation', stationId);
+      window.location.href = 'rent-bike.html';
+    }
+
+    // Close station modal
+    function closeStationModal() {
+      document.getElementById('stationModal').classList.remove('active');
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('stationModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeStationModal();
+      }
+    });
+
+    // Initialize
+    loadStations();
+  </script>
+</body>
+</html>

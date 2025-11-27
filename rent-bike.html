@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rent a Bike - Smart Bike Rental</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+    
+    .navbar {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #2c3e50;
+      cursor: pointer;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+    }
+    
+    .nav-btn {
+      padding: 8px 16px;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    
+    .nav-btn:hover {
+      background: #5568d3;
+    }
+    
+    .back-btn {
+      background: #95a5a6;
+    }
+    
+    .back-btn:hover {
+      background: #7f8c8d;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+    
+    .page-header {
+      text-align: center;
+      color: white;
+      margin-bottom: 2rem;
+    }
+    
+    .page-header h1 {
+      font-size: 2.5em;
+      margin-bottom: 0.5rem;
+    }
+    
+    .filter-section {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 1.5rem;
+      border-radius: 15px;
+      margin-bottom: 2rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    
+    .filter-group {
+      flex: 1;
+      min-width: 200px;
+    }
+    
+    .filter-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      color: #2c3e50;
+    }
+    
+    .filter-group select {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #e1e8ed;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    
+    .bikes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+    
+    .bike-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    
+    .bike-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .bike-image {
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5em;
+    }
+    
+    .bike-details {
+      padding: 1.5rem;
+    }
+    
+    .bike-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    
+    .bike-id {
+      font-size: 1.3em;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    
+    .bike-type {
+      background: #667eea;
+      color: white;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.85em;
+      font-weight: bold;
+    }
+    
+    .bike-info {
+      margin-bottom: 1rem;
+    }
+    
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #ecf0f1;
+    }
+    
+    .info-row:last-child {
+      border-bottom: none;
+    }
+    
+    .info-label {
+      color: #7f8c8d;
+      font-size: 0.9em;
+    }
+    
+    .info-value {
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    
+    .battery-bar {
+      width: 100px;
+      height: 8px;
+      background: #ecf0f1;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .battery-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #27ae60, #2ecc71);
+      transition: width 0.3s ease;
+    }
+    
+    .battery-fill.low {
+      background: linear-gradient(90deg, #e74c3c, #c0392b);
+    }
+    
+    .battery-fill.medium {
+      background: linear-gradient(90deg, #f39c12, #e67e22);
+    }
+    
+    .status-badge {
+      display: inline-block;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.85em;
+      font-weight: bold;
+    }
+    
+    .status-badge.available {
+      background: #d4edda;
+      color: #155724;
+    }
+    
+    .status-badge.rented {
+      background: #f8d7da;
+      color: #721c24;
+    }
+    
+    .rent-btn {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .rent-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    .rent-btn:disabled {
+      background: #95a5a6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal.active {
+      display: flex;
+    }
+    
+    .modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 20px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .modal-header h2 {
+      color: #2c3e50;
+    }
+    
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.5em;
+      cursor: pointer;
+      color: #7f8c8d;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e1e8ed;
+      border-radius: 10px;
+      font-size: 15px;
+    }
+    
+    .price-display {
+      background: #f8f9fa;
+      padding: 1rem;
+      border-radius: 10px;
+      text-align: center;
+      margin: 1rem 0;
+    }
+    
+    .price-display .label {
+      color: #7f8c8d;
+      font-size: 0.9em;
+    }
+    
+    .price-display .amount {
+      font-size: 2em;
+      font-weight: bold;
+      color: #27ae60;
+    }
+    
+    @media (max-width: 768px) {
+      .bikes-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .filter-section {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo" onclick="window.location.href='dashboard.html'">
+      🚲 Smart Bike Rental
+    </div>
+    <div class="nav-links">
+      <a href="dashboard.html" class="nav-btn back-btn">← Back to Dashboard</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="page-header">
+      <h1>🚴‍♂️ Rent a Bike</h1>
+      <p>Choose your perfect ride for the journey ahead</p>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-group">
+        <label>Filter by Type</label>
+        <select id="typeFilter" onchange="filterBikes()">
+          <option value="all">All Types</option>
+          <option value="Scooter">🛵 Scooters (Activa, Jupiter, Access)</option>
+          <option value="Bike">🏍️ Motorcycles (Splendor, Pulsar)</option>
+        </select>
+      </div>
+      
+      <div class="filter-group">
+        <label>Filter by Status</label>
+        <select id="statusFilter" onchange="filterBikes()">
+          <option value="all">All Status</option>
+          <option value="available">Available Only</option>
+        </select>
+      </div>
+      
+      <div class="filter-group">
+        <label>Sort by</label>
+        <select id="sortBy" onchange="filterBikes()">
+          <option value="id">Bike ID</option>
+          <option value="model">Model Name</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="bikes-grid" id="bikesContainer">
+      <!-- Bikes will be loaded here -->
+    </div>
+  </div>
+
+  <!-- Rental Modal -->
+  <div class="modal" id="rentalModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>🚲 Rent: <span id="modalBikeName"></span></h2>
+        <button class="close-btn" onclick="closeModal()">×</button>
+      </div>
+      
+      <form id="rentalForm">
+        <div class="form-group">
+          <label>Select Station</label>
+          <select id="stationSelect" required>
+            <option value="">Choose pickup station...</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>Duration (hours)</label>
+          <input type="number" id="duration" min="1" max="24" value="2" required oninput="calculatePrice()">
+        </div>
+        
+        <div class="price-display">
+          <div class="label">Estimated Price</div>
+          <div class="amount">₹<span id="priceAmount">20</span></div>
+          <small style="color: #7f8c8d;">₹10 per hour</small>
+        </div>
+        
+        <button type="submit" class="rent-btn">Confirm Rental</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    let allBikes = [];
+    let selectedBike = null;
+    const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+
+    if (!user.userId) {
+      window.location.href = 'login.html';
+    }
+
+    // Map database models to real bike/scooter names
+    const realNames = {
+      'Scooter X': 'Honda Activa 6G',
+      'Scooter Z': 'TVS Jupiter',
+      'Scooter B': 'Suzuki Access 125',
+      'Bike Y': 'Hero Splendor Plus',
+      'Bike A': 'Bajaj Pulsar 150'
+    };
+
+    // Load bikes
+    async function loadBikes() {
+      try {
+        const response = await fetch('/api/bikes');
+        if (response.ok) {
+          allBikes = await response.json();
+          console.log('✅ Bikes loaded:', allBikes);
+          
+          if (allBikes.length === 0) {
+            console.log('❌ No bikes found in database');
+            document.getElementById('bikesContainer').innerHTML = `
+              <div style="grid-column: 1/-1; text-align: center; color: white; padding: 3rem;">
+                <div style="font-size: 5em; margin-bottom: 1rem;">🚲</div>
+                <h2 style="font-size: 2em; margin-bottom: 1rem;">No Bikes Available</h2>
+                <p style="font-size: 1.2em;">Please check back later or contact support.</p>
+              </div>
+            `;
+            return;
+          }
+          
+          displayBikes(allBikes);
+        } else {
+          console.error('❌ Failed to load bikes:', response.status);
+          alert('Error loading bikes. Server returned: ' + response.status);
+        }
+      } catch (error) {
+        console.error('❌ Network error loading bikes:', error);
+        document.getElementById('bikesContainer').innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; color: white; padding: 3rem;">
+            <div style="font-size: 5em; margin-bottom: 1rem;">⚠️</div>
+            <h2 style="font-size: 2em; margin-bottom: 1rem;">Connection Error</h2>
+            <p style="font-size: 1.2em;">Cannot connect to server. Please make sure server is running.</p>
+            <button onclick="loadBikes()" style="margin-top: 2rem; padding: 1rem 2rem; background: white; border: none; border-radius: 10px; font-size: 1.1em; cursor: pointer;">
+              🔄 Retry
+            </button>
+          </div>
+        `;
+      }
+    }
+
+    // Display bikes
+    function displayBikes(bikes) {
+      const container = document.getElementById('bikesContainer');
+      
+      if (bikes.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; color: white; padding: 3rem; background: rgba(0,0,0,0.2); border-radius: 15px;">
+            <div style="font-size: 4em; margin-bottom: 1rem;">🔍</div>
+            <h3 style="font-size: 1.8em; margin-bottom: 1rem;">No bikes match your filters</h3>
+            <p style="font-size: 1.1em; margin-bottom: 1.5rem;">Try adjusting your search criteria</p>
+            <button onclick="resetFilters()" style="padding: 1rem 2rem; background: white; color: #667eea; border: none; border-radius: 10px; font-size: 1em; font-weight: bold; cursor: pointer;">
+              🔄 Reset Filters
+            </button>
+          </div>
+        `;
+        return;
+      }
+      
+      container.innerHTML = bikes.map(bike => {
+        const bikeId = bike.BIKE_ID;
+        const dbModel = bike.MODEL || 'Standard Bike';
+        const realName = realNames[dbModel] || dbModel;
+        const bikeType = dbModel.toLowerCase().includes('scooter') ? 'Scooter' : 'Motorcycle';
+        const isAvailable = bike.IS_AVAILABLE === 1 || bike.IS_AVAILABLE === true;
+        const stationId = bike.STATION_ID || 1;
+        const bikeStatus = isAvailable ? 'Available' : 'Rented';
+        
+        const bikeBattery = Math.floor(Math.random() * 30) + 70;
+        const batteryClass = bikeBattery >= 70 ? '' : 'medium';
+        
+        return `
+          <div class="bike-card">
+            <div class="bike-image">
+              ${bikeType === 'Scooter' ? '🛵' : '🏍️'}
+            </div>
+            <div class="bike-details">
+              <div class="bike-header">
+                <div class="bike-id">${realName}</div>
+                <div class="bike-type">${bikeType}</div>
+              </div>
+              
+              <div class="bike-info">
+                <div class="info-row">
+                  <span class="info-label">Bike ID</span>
+                  <span class="info-value">#${bikeId}</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Status</span>
+                  <span class="status-badge ${isAvailable ? 'available' : 'rented'}">
+                    ${bikeStatus}
+                  </span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Fuel Status</span>
+                  <span class="info-value" style="color: ${bikeBattery >= 70 ? '#27ae60' : '#e74c3c'};">
+                    ${bikeBattery >= 70 ? '⛽ Full Tank' : '⛽ Low Fuel'}
+                  </span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Station</span>
+                  <span class="info-value">Station #${stationId}</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">Rate</span>
+                  <span class="info-value">₹10/hour</span>
+                </div>
+              </div>
+              
+              <button class="rent-btn" 
+                      ${!isAvailable ? 'disabled' : ''} 
+                      onclick="openRentalModal(${bikeId}, '${realName.replace(/'/g, "\\'")}', ${stationId})">
+                ${isAvailable ? '🚴 Rent Now' : '❌ Not Available'}
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Reset filters
+    function resetFilters() {
+      document.getElementById('typeFilter').value = 'all';
+      document.getElementById('statusFilter').value = 'all';
+      document.getElementById('sortBy').value = 'id';
+      displayBikes(allBikes);
+    }
+
+    // Filter bikes
+    function filterBikes() {
+      const typeFilter = document.getElementById('typeFilter').value;
+      const statusFilter = document.getElementById('statusFilter').value;
+      const sortBy = document.getElementById('sortBy').value;
+      
+      let filtered = [...allBikes];
+      
+      if (typeFilter !== 'all') {
+        filtered = filtered.filter(bike => {
+          const model = bike.MODEL || '';
+          if (typeFilter === 'Scooter') {
+            return model.toLowerCase().includes('scooter');
+          } else if (typeFilter === 'Bike') {
+            return model.toLowerCase().includes('bike');
+          }
+          return true;
+        });
+      }
+      
+      if (statusFilter === 'available') {
+        filtered = filtered.filter(bike => {
+          return bike.IS_AVAILABLE === 1 || bike.IS_AVAILABLE === true;
+        });
+      }
+      
+      if (sortBy === 'model') {
+        filtered.sort((a, b) => {
+          const modelA = a.MODEL || '';
+          const modelB = b.MODEL || '';
+          return modelA.localeCompare(modelB);
+        });
+      } else {
+        filtered.sort((a, b) => a.BIKE_ID - b.BIKE_ID);
+      }
+      
+      console.log(`Filtered bikes: ${filtered.length}`);
+      displayBikes(filtered);
+    }
+
+    // Load stations
+    async function loadStations() {
+      try {
+        const response = await fetch('/api/stations');
+        if (response.ok) {
+          const stations = await response.json();
+          console.log('Stations loaded:', stations);
+          const select = document.getElementById('stationSelect');
+          
+          if (stations.length === 0) {
+            select.innerHTML = '<option value="">No stations available</option>';
+            return;
+          }
+          
+          select.innerHTML = '<option value="">Choose pickup station...</option>' +
+            stations.map(station => {
+              // Handle different field name possibilities
+              const stationId = station.STATION_ID || station.stationId || station.id;
+              const stationName = station.NAME || station.name || `Station ${stationId}`;
+              const availableBikes = station.AVAILABLE_BIKES || station.availableBikes || 0;
+              
+              return `<option value="${stationId}">${stationName} (${availableBikes} bikes available)</option>`;
+            }).join('');
+        }
+      } catch (error) {
+        console.error('Error loading stations:', error);
+        document.getElementById('stationSelect').innerHTML = '<option value="">Error loading stations</option>';
+      }
+    }
+
+    // Open rental modal
+    function openRentalModal(bikeId, bikeName, stationId) {
+      selectedBike = bikeId;
+      document.getElementById('modalBikeName').textContent = bikeName;
+      document.getElementById('rentalModal').classList.add('active');
+      calculatePrice();
+    }
+
+    // Close modal
+    function closeModal() {
+      document.getElementById('rentalModal').classList.remove('active');
+      document.getElementById('rentalForm').reset();
+    }
+
+    // Calculate price
+    function calculatePrice() {
+      const duration = document.getElementById('duration').value || 2;
+      const price = duration * 10;
+      document.getElementById('priceAmount').textContent = price;
+    }
+
+    // Submit rental
+    document.getElementById('rentalForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const stationId = document.getElementById('stationSelect').value;
+      const duration = document.getElementById('duration').value;
+      
+      if (!stationId) {
+        alert('Please select a pickup station');
+        return;
+      }
+      
+      try {
+        const response = await fetch('/api/rent-bike', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId: user.userId,
+            bikeId: selectedBike,
+            duration: parseInt(duration),
+            stationId: parseInt(stationId)
+          })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          alert('✅ ' + result.message);
+          closeModal();
+          loadBikes();
+          setTimeout(() => {
+            window.location.href = 'my-rides.html';
+          }, 1500);
+        } else {
+          alert('❌ ' + result.message);
+        }
+      } catch (error) {
+        alert('Error renting bike: ' + error.message);
+      }
+    });
+
+    // Initialize
+    loadBikes();
+    loadStations();
+  </script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  background: linear-gradient(to right, #00c6ff, #0072ff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Container for forms and dashboard */
+.container {
+  width: 90%;
+  max-width: 450px;
+  margin: 20px auto;
+}
+
+/* Card style */
+.card {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  padding: 30px;
+  text-align: center;
+}
+
+/* Card headings */
+.card h2 {
+  margin-bottom: 20px;
+  font-size: 28px;
+  color: #0072ff;
+}
+
+/* Input fields */
+.card input, .card select {
+  width: 100%;
+  padding: 12px 15px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+/* Buttons */
+.btn {
+  cursor: pointer;
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  transition: 0.3s;
+}
+
+.btn-primary {
+  background: #0072ff;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #005bb5;
+}
+
+/* Navbar */
+.navbar {
+  width: 100%;
+  background: #0072ff;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+}
+
+.navbar .logo {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.navbar .user-info span {
+  margin-right: 15px;
+}
+
+/* Stats Cards */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.stat-card {
+  background: #00c6ff;
+  background: linear-gradient(to right, #00c6ff, #0072ff);
+  color: white;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+}
+
+.stat-card .icon {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.stat-card .value {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.stat-card .label {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+/* Quick Actions */
+.quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.quick-actions a {
+  flex: 1 1 45%;
+  background: #fff;
+  color: #0072ff;
+  padding: 12px;
+  text-decoration: none;
+  border-radius: 10px;
+  text-align: center;
+  font-weight: bold;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  transition: 0.3s;
+}
+
+.quick-actions a:hover {
+  background: #0072ff;
+  color: #fff;
+}
+
+/* Tables for rides, stations, payments */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+table th, table td {
+  padding: 12px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+table th {
+  background: #0072ff;
+  color: white;
+}
+
+table tbody tr:nth-child(even) {
+  background: #f2f2f2;
+}

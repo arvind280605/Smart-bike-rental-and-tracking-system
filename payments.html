@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payments - Smart Bike Rental</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+    
+    .navbar {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #2c3e50;
+      cursor: pointer;
+    }
+    
+    .nav-btn {
+      padding: 8px 16px;
+      background: #95a5a6;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    
+    .nav-btn:hover {
+      background: #7f8c8d;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+    
+    .page-header {
+      text-align: center;
+      color: white;
+      margin-bottom: 2rem;
+    }
+    
+    .page-header h1 {
+      font-size: 2.5em;
+      margin-bottom: 0.5rem;
+    }
+    
+    .summary-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+    
+    .summary-card {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 2rem;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+    
+    .summary-icon {
+      font-size: 3em;
+      margin-bottom: 1rem;
+    }
+    
+    .summary-value {
+      font-size: 2.5em;
+      font-weight: bold;
+      color: #2c3e50;
+      margin-bottom: 0.5rem;
+    }
+    
+    .summary-label {
+      color: #7f8c8d;
+      font-size: 1.1em;
+    }
+    
+    .payment-section {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+    
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid #ecf0f1;
+    }
+    
+    .section-title {
+      font-size: 1.8em;
+      color: #2c3e50;
+    }
+    
+    .filter-dropdown {
+      padding: 10px 20px;
+      border: 2px solid #e1e8ed;
+      border-radius: 10px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    
+    .payments-table {
+      width: 100%;
+      overflow-x: auto;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    thead {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    
+    th {
+      padding: 1rem;
+      text-align: left;
+      font-weight: bold;
+    }
+    
+    td {
+      padding: 1rem;
+      border-bottom: 1px solid #ecf0f1;
+    }
+    
+    tbody tr:hover {
+      background: #f8f9fa;
+    }
+    
+    .payment-row {
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .payment-id {
+      font-weight: bold;
+      color: #667eea;
+    }
+    
+    .payment-date {
+      color: #7f8c8d;
+      font-size: 0.9em;
+    }
+    
+    .payment-amount {
+      font-weight: bold;
+      color: #27ae60;
+      font-size: 1.2em;
+    }
+    
+    .payment-status {
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.85em;
+      font-weight: bold;
+    }
+    
+    .status-paid {
+      background: #d4edda;
+      color: #155724;
+    }
+    
+    .status-pending {
+      background: #fff3cd;
+      color: #856404;
+    }
+    
+    .action-btns {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .icon-btn {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.2em;
+      transition: all 0.3s ease;
+    }
+    
+    .download-btn {
+      background: #3498db;
+      color: white;
+    }
+    
+    .download-btn:hover {
+      background: #2980b9;
+      transform: translateY(-2px);
+    }
+    
+    .view-btn {
+      background: #95a5a6;
+      color: white;
+    }
+    
+    .view-btn:hover {
+      background: #7f8c8d;
+      transform: translateY(-2px);
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: #7f8c8d;
+    }
+    
+    .empty-icon {
+      font-size: 5em;
+      margin-bottom: 1rem;
+    }
+    
+    .empty-text {
+      font-size: 1.2em;
+      margin-bottom: 1.5rem;
+    }
+    
+    .add-payment-btn {
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    @media (max-width: 768px) {
+      .payments-table {
+        font-size: 0.85em;
+      }
+      
+      th, td {
+        padding: 0.7rem;
+      }
+      
+      .summary-cards {
+        grid-template-columns: 1fr;
+      }
+      
+      .action-btns {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo" onclick="window.location.href='dashboard.html'">
+      🚲 Smart Bike Rental
+    </div>
+    <a href="dashboard.html" class="nav-btn">← Back to Dashboard</a>
+  </nav>
+
+  <div class="container">
+    <div class="page-header">
+      <h1>💳 Payment History</h1>
+      <p>Track all your transactions and payments</p>
+    </div>
+
+    <div class="summary-cards">
+      <div class="summary-card">
+        <div class="summary-icon">💰</div>
+        <div class="summary-value" id="totalPaid">₹0</div>
+        <div class="summary-label">Total Paid</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-icon">📊</div>
+        <div class="summary-value" id="totalTransactions">0</div>
+        <div class="summary-label">Transactions</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-icon">📅</div>
+        <div class="summary-value" id="lastPayment">-</div>
+        <div class="summary-label">Last Payment</div>
+      </div>
+    </div>
+
+    <div class="payment-section">
+      <div class="section-header">
+        <h2 class="section-title">Transaction History</h2>
+        <select class="filter-dropdown" id="monthFilter" onchange="filterPayments()">
+          <option value="all">All Time</option>
+          <option value="this-month">This Month</option>
+          <option value="last-month">Last Month</option>
+          <option value="last-3-months">Last 3 Months</option>
+        </select>
+      </div>
+
+      <div class="payments-table">
+        <table id="paymentsTable">
+          <thead>
+            <tr>
+              <th>Transaction ID</th>
+              <th>Date & Time</th>
+              <th>Description</th>
+              <th>Duration</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="paymentsBody">
+            <!-- Payments will be loaded here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let allPayments = [];
+    const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+
+    if (!user.userId) {
+      window.location.href = 'login.html';
+    }
+
+    // Load payments
+    async function loadPayments() {
+      try {
+        const response = await fetch(`/api/payments/${user.userId}`);
+        if (response.ok) {
+          allPayments = await response.json();
+          displayPayments(allPayments);
+          updateSummary();
+        }
+      } catch (error) {
+        console.error('Error loading payments:', error);
+      }
+    }
+
+    // Display payments
+    function displayPayments(payments) {
+      const tbody = document.getElementById('paymentsBody');
+      
+      if (payments.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7">
+              <div class="empty-state">
+                <div class="empty-icon">💳</div>
+                <div class="empty-text">No payment history yet</div>
+                <a href="rent-bike.html" class="add-payment-btn">Start Your First Ride</a>
+              </div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+      
+      tbody.innerHTML = payments.map((payment, index) => {
+        const date = new Date(payment.date);
+        const dateStr = date.toLocaleDateString();
+        const timeStr = date.toLocaleTimeString();
+        
+        return `
+          <tr class="payment-row" onclick="viewPaymentDetails('${payment.id}')">
+            <td class="payment-id">#TXN${String(index + 1001).padStart(4, '0')}</td>
+            <td>
+              <div>${dateStr}</div>
+              <div class="payment-date">${timeStr}</div>
+            </td>
+            <td>${payment.description}</td>
+            <td>${payment.duration} hrs</td>
+            <td class="payment-amount">₹${payment.amount}</td>
+            <td>
+              <span class="payment-status status-${payment.status.toLowerCase()}">
+                ${payment.status}
+              </span>
+            </td>
+            <td>
+              <div class="action-btns">
+                <button class="icon-btn download-btn" onclick="downloadReceipt(event, '${payment.id}')" title="Download Receipt">
+                  📥
+                </button>
+                <button class="icon-btn view-btn" onclick="viewPaymentDetails(event, '${payment.id}')" title="View Details">
+                  👁️
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // Filter payments
+    function filterPayments() {
+      const filter = document.getElementById('monthFilter').value;
+      const now = new Date();
+      let filtered = [...allPayments];
+      
+      if (filter === 'this-month') {
+        filtered = allPayments.filter(payment => {
+          const date = new Date(payment.date);
+          return date.getMonth() === now.getMonth() && 
+                 date.getFullYear() === now.getFullYear();
+        });
+      } else if (filter === 'last-month') {
+        const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+        filtered = allPayments.filter(payment => {
+          const date = new Date(payment.date);
+          return date.getMonth() === lastMonth.getMonth() && 
+                 date.getFullYear() === lastMonth.getFullYear();
+        });
+      } else if (filter === 'last-3-months') {
+        const threeMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 3, 1);
+        filtered = allPayments.filter(payment => {
+          const date = new Date(payment.date);
+          return date >= threeMonthsAgo;
+        });
+      }
+      
+      displayPayments(filtered);
+    }
+
+    // Update summary
+    function updateSummary() {
+      const totalPaid = allPayments.reduce((sum, payment) => sum + payment.amount, 0);
+      const totalTransactions = allPayments.length;
+      const lastPaymentDate = allPayments.length > 0 
+        ? new Date(allPayments[0].date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+        : '-';
+      
+      document.getElementById('totalPaid').textContent = `₹${totalPaid}`;
+      document.getElementById('totalTransactions').textContent = totalTransactions;
+      document.getElementById('lastPayment').textContent = lastPaymentDate;
+    }
+
+    // View payment details
+    function viewPaymentDetails(event, paymentId) {
+      if (event && event.stopPropagation) {
+        event.stopPropagation();
+      }
+      
+      const payment = allPayments.find(p => p.id === paymentId);
+      if (payment) {
+        const date = new Date(payment.date);
+        alert(`
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     PAYMENT RECEIPT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Transaction ID: #TXN${String(allPayments.indexOf(payment) + 1001).padStart(4, '0')}
+Date: ${date.toLocaleString()}
+
+Description: ${payment.description}
+Duration: ${payment.duration} hours
+Rate: ₹10 per hour
+
+Amount Paid: ₹${payment.amount}
+Status: ${payment.status}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Thank you for riding with us!
+Smart Bike Rental
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        `);
+      }
+    }
+
+    // Download receipt
+    function downloadReceipt(event, paymentId) {
+      event.stopPropagation();
+      
+      const payment = allPayments.find(p => p.id === paymentId);
+      if (payment) {
+        const date = new Date(payment.date);
+        const txnId = `TXN${String(allPayments.indexOf(payment) + 1001).padStart(4, '0')}`;
+        
+        const receiptContent = `
+SMART BIKE RENTAL - PAYMENT RECEIPT
+═══════════════════════════════════════
+
+Transaction ID: #${txnId}
+Date: ${date.toLocaleString()}
+Customer: ${user.name}
+Email: ${user.email}
+
+─────────────────────────────────────
+Description: ${payment.description}
+Duration: ${payment.duration} hours
+Rate: ₹10/hour
+─────────────────────────────────────
+
+Amount Paid: ₹${payment.amount}
+Payment Status: ${payment.status}
+
+═══════════════════════════════════════
+Thank you for choosing Smart Bike Rental!
+For support: support@smartbikerental.com
+═══════════════════════════════════════
+        `;
+        
+        const blob = new Blob([receiptContent], { type: 'text/plain' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Receipt_${txnId}_${date.toISOString().split('T')[0]}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        
+        alert('✅ Receipt downloaded successfully!');
+      }
+    }
+
+    // Initialize
+    loadPayments();
+  </script>
+</body>
+</html>

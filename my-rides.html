@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Rides - Smart Bike Rental</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+    
+    .navbar {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #2c3e50;
+      cursor: pointer;
+    }
+    
+    .nav-btn {
+      padding: 8px 16px;
+      background: #95a5a6;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    
+    .nav-btn:hover {
+      background: #7f8c8d;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+    
+    .page-header {
+      text-align: center;
+      color: white;
+      margin-bottom: 2rem;
+    }
+    
+    .page-header h1 {
+      font-size: 2.5em;
+      margin-bottom: 0.5rem;
+    }
+    
+    .tabs {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 1rem;
+      border-radius: 15px;
+      margin-bottom: 2rem;
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+    
+    .tab {
+      padding: 12px 24px;
+      background: transparent;
+      border: 2px solid transparent;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      color: #7f8c8d;
+      transition: all 0.3s ease;
+    }
+    
+    .tab.active {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-color: #667eea;
+    }
+    
+    .rides-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    
+    .ride-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      padding: 1.5rem;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+    
+    .ride-card:hover {
+      transform: translateX(5px);
+    }
+    
+    .ride-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid #ecf0f1;
+    }
+    
+    .ride-title {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .ride-icon {
+      font-size: 2.5em;
+    }
+    
+    .ride-info-header {
+      flex: 1;
+    }
+    
+    .bike-id {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    
+    .ride-date {
+      color: #7f8c8d;
+      font-size: 0.9em;
+    }
+    
+    .status-badge {
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 0.9em;
+    }
+    
+    .status-badge.ongoing {
+      background: #fff3cd;
+      color: #856404;
+    }
+    
+    .status-badge.completed {
+      background: #d4edda;
+      color: #155724;
+    }
+    
+    .ride-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .detail-item {
+      text-align: center;
+      padding: 1rem;
+      background: #f8f9fa;
+      border-radius: 10px;
+    }
+    
+    .detail-label {
+      color: #7f8c8d;
+      font-size: 0.85em;
+      margin-bottom: 0.3rem;
+    }
+    
+    .detail-value {
+      font-size: 1.3em;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    
+    .ride-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+    }
+    
+    .action-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .end-ride-btn {
+      background: #e74c3c;
+      color: white;
+    }
+    
+    .end-ride-btn:hover {
+      background: #c0392b;
+      transform: translateY(-2px);
+    }
+    
+    .view-details-btn {
+      background: white;
+      border: 2px solid #667eea;
+      color: #667eea;
+    }
+    
+    .view-details-btn:hover {
+      background: #f8f9fa;
+    }
+    
+    .empty-state {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 3rem;
+      border-radius: 15px;
+      text-align: center;
+    }
+    
+    .empty-icon {
+      font-size: 5em;
+      margin-bottom: 1rem;
+    }
+    
+    .empty-text {
+      color: #7f8c8d;
+      font-size: 1.2em;
+      margin-bottom: 1.5rem;
+    }
+    
+    .empty-btn {
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    .stats-row {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 2rem;
+      border-radius: 15px;
+      margin-bottom: 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+    }
+    
+    .stat-box {
+      text-align: center;
+    }
+    
+    .stat-icon {
+      font-size: 2.5em;
+      margin-bottom: 0.5rem;
+    }
+    
+    .stat-number {
+      font-size: 2em;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+    
+    .stat-label {
+      color: #7f8c8d;
+      margin-top: 0.3rem;
+    }
+    
+    @media (max-width: 768px) {
+      .ride-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      
+      .ride-details {
+        grid-template-columns: 1fr 1fr;
+      }
+      
+      .ride-actions {
+        flex-direction: column;
+      }
+      
+      .stats-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo" onclick="window.location.href='dashboard.html'">
+      🚲 Smart Bike Rental
+    </div>
+    <a href="dashboard.html" class="nav-btn">← Back to Dashboard</a>
+  </nav>
+
+  <div class="container">
+    <div class="page-header">
+      <h1>📋 My Rides</h1>
+      <p>Track your cycling journey and history</p>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-box">
+        <div class="stat-icon">🚴‍♂️</div>
+        <div class="stat-number" id="totalRides">0</div>
+        <div class="stat-label">Total Rides</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-icon">⏱️</div>
+        <div class="stat-number" id="totalHours">0</div>
+        <div class="stat-label">Total Hours</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-icon">💰</div>
+        <div class="stat-number" id="totalSpent">₹0</div>
+        <div class="stat-label">Total Spent</div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('all')">All Rides</button>
+      <button class="tab" onclick="showTab('ongoing')">Ongoing</button>
+      <button class="tab" onclick="showTab('completed')">Completed</button>
+    </div>
+
+    <div class="rides-list" id="ridesContainer">
+      <!-- Rides will be loaded here -->
+    </div>
+  </div>
+
+  <script>
+    let allRides = [];
+    let currentFilter = 'all';
+    const user = JSON.parse(sessionStorage.getItem('user') || '{}');
+
+    if (!user.userId) {
+      window.location.href = 'login.html';
+    }
+
+    // Load rides
+    async function loadRides() {
+      try {
+        const response = await fetch(`/api/rides/${user.userId}`);
+        if (response.ok) {
+          allRides = await response.json();
+          displayRides(allRides);
+          updateStats();
+        }
+      } catch (error) {
+        console.error('Error loading rides:', error);
+      }
+    }
+
+    // Display rides
+    function displayRides(rides) {
+      const container = document.getElementById('ridesContainer');
+      
+      if (rides.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">🚲</div>
+            <div class="empty-text">No rides found. Start your first ride!</div>
+            <a href="rent-bike.html" class="empty-btn">🚴 Rent a Bike</a>
+          </div>
+        `;
+        return;
+      }
+      
+      container.innerHTML = rides.map(ride => {
+        const startDate = new Date(ride.START_TIME);
+        const isOngoing = ride.STATUS === 'Ongoing';
+        const endTime = ride.END_TIME ? new Date(ride.END_TIME) : null;
+        
+        // Get duration - prioritize minutes if available
+        let durationDisplay = '';
+        if (ride.ACTUAL_MINUTES) {
+          // If we have actual minutes
+          const minutes = ride.ACTUAL_MINUTES;
+          if (minutes < 60) {
+            durationDisplay = `${minutes} min${minutes !== 1 ? 's' : ''}`;
+          } else {
+            const hours = Math.floor(minutes / 60);
+            const remainingMins = minutes % 60;
+            if (remainingMins > 0) {
+              durationDisplay = `${hours} hr${hours !== 1 ? 's' : ''} ${remainingMins} min${remainingMins !== 1 ? 's' : ''}`;
+            } else {
+              durationDisplay = `${hours} hr${hours !== 1 ? 's' : ''}`;
+            }
+          }
+        } else if (ride.ACTUAL_DURATION) {
+          // Fallback to hours
+          const hours = ride.ACTUAL_DURATION;
+          if (hours < 1) {
+            const minutes = Math.round(hours * 60);
+            durationDisplay = `${minutes} min${minutes !== 1 ? 's' : ''}`;
+          } else {
+            durationDisplay = `${hours} hr${hours !== 1 ? 's' : ''}`;
+          }
+        } else {
+          // Use planned duration
+          const hours = ride.DURATION_HRS;
+          durationDisplay = `${hours} hr${hours !== 1 ? 's' : ''}`;
+        }
+        
+        const amount = ride.FINAL_AMOUNT || ride.AMOUNT;
+        
+        return `
+          <div class="ride-card">
+            <div class="ride-header">
+              <div class="ride-title">
+                <div class="ride-icon">🚲</div>
+                <div class="ride-info-header">
+                  <div class="bike-id">Bike #${ride.BIKE_ID}</div>
+                  <div class="ride-date">${startDate.toLocaleDateString()} at ${startDate.toLocaleTimeString()}</div>
+                </div>
+              </div>
+              <span class="status-badge ${isOngoing ? 'ongoing' : 'completed'}">
+                ${isOngoing ? '🔄 Ongoing' : '✅ Completed'}
+              </span>
+            </div>
+            
+            <div class="ride-details">
+              <div class="detail-item">
+                <div class="detail-label">Duration</div>
+                <div class="detail-value">${durationDisplay}</div>
+              </div>
+              <div class="detail-item">
+                <div class="detail-label">Amount</div>
+                <div class="detail-value">₹${amount}</div>
+              </div>
+              ${ride.STATION_ID ? `
+              <div class="detail-item">
+                <div class="detail-label">Station</div>
+                <div class="detail-value">#${ride.STATION_ID}</div>
+              </div>
+              ` : ''}
+              ${endTime ? `
+              <div class="detail-item">
+                <div class="detail-label">Ended</div>
+                <div class="detail-value">${endTime.toLocaleTimeString()}</div>
+              </div>
+              ` : ''}
+            </div>
+            
+            <div class="ride-actions">
+              ${isOngoing ? `
+                <button class="action-btn end-ride-btn" onclick="endRide('${ride._id}')">
+                  🛑 End Ride
+                </button>
+              ` : ''}
+              <button class="action-btn view-details-btn" onclick="viewRideDetails('${ride._id}')">
+                📄 View Receipt
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Show tab
+    function showTab(filter) {
+      currentFilter = filter;
+      
+      // Update tab styles
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      // Filter rides
+      let filtered = allRides;
+      if (filter === 'ongoing') {
+        filtered = allRides.filter(ride => ride.STATUS === 'Ongoing');
+      } else if (filter === 'completed') {
+        filtered = allRides.filter(ride => ride.STATUS === 'Completed');
+      }
+      
+      displayRides(filtered);
+    }
+
+    // Update stats
+    function updateStats() {
+      const totalRides = allRides.length;
+      const totalHours = allRides.reduce((sum, ride) => 
+        sum + (ride.ACTUAL_DURATION || ride.DURATION_HRS), 0);
+      const totalSpent = allRides.reduce((sum, ride) => 
+        sum + (ride.FINAL_AMOUNT || ride.AMOUNT), 0);
+      
+      document.getElementById('totalRides').textContent = totalRides;
+      document.getElementById('totalHours').textContent = totalHours;
+      document.getElementById('totalSpent').textContent = `₹${totalSpent}`;
+    }
+
+    // End ride
+    async function endRide(rideId) {
+      const stationId = prompt('Enter Station ID where you\'re returning the bike:');
+      
+      if (!stationId) return;
+      
+      try {
+        const response = await fetch('/api/end-ride', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ rideId, stationId: parseInt(stationId) })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          alert(`✅ Ride completed! Final amount: ₹${result.finalAmount}`);
+          loadRides();
+        } else {
+          alert('❌ ' + result.message);
+        }
+      } catch (error) {
+        alert('Error ending ride: ' + error.message);
+      }
+    }
+
+    // View ride details
+    function viewRideDetails(rideId) {
+      const ride = allRides.find(r => r._id === rideId);
+      if (ride) {
+        const startDate = new Date(ride.START_TIME);
+        const endDate = ride.END_TIME ? new Date(ride.END_TIME) : null;
+        
+        // Format duration
+        let durationText = '';
+        if (ride.ACTUAL_MINUTES) {
+          const minutes = ride.ACTUAL_MINUTES;
+          if (minutes < 60) {
+            durationText = `${minutes} minutes`;
+          } else {
+            const hours = Math.floor(minutes / 60);
+            const remainingMins = minutes % 60;
+            if (remainingMins > 0) {
+              durationText = `${hours} hour${hours !== 1 ? 's' : ''} ${remainingMins} minute${remainingMins !== 1 ? 's' : ''}`;
+            } else {
+              durationText = `${hours} hour${hours !== 1 ? 's' : ''}`;
+            }
+          }
+        } else if (ride.ACTUAL_DURATION) {
+          const hours = ride.ACTUAL_DURATION;
+          if (hours < 1) {
+            const minutes = Math.round(hours * 60);
+            durationText = `${minutes} minutes`;
+          } else {
+            durationText = `${hours} hours`;
+          }
+        } else {
+          durationText = `${ride.DURATION_HRS} hours`;
+        }
+        
+        alert(`
+━━━━━━━━━━━━━━━━━━━━━
+    RIDE RECEIPT
+━━━━━━━━━━━━━━━━━━━━━
+
+Bike ID: #${ride.BIKE_ID}
+Status: ${ride.STATUS}
+
+Start: ${startDate.toLocaleString()}
+${endDate ? `End: ${endDate.toLocaleString()}` : 'Ongoing...'}
+
+Duration: ${durationText}
+Amount: ₹${ride.FINAL_AMOUNT || ride.AMOUNT}
+
+━━━━━━━━━━━━━━━━━━━━━
+Thank you for riding with us!
+        `);
+      }
+    }
+
+    // Initialize
+    loadRides();
+  </script>
+</body>
+</html>
