@@ -4,10 +4,10 @@ const path = require("path");
 const bcrypt = require('bcrypt'); // For password hashing - run: npm install bcrypt
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // MongoDB Atlas connection string
-const uri = "mongodb+srv://arvindd:arvind2803@cluster0.yt7z55m.mongodb.net/?retryWrites=true&w=majority";
+const uri = process.env.MONGODB_URI;
 const client = new MongoClient(uri);
 
 app.use(express.json());
