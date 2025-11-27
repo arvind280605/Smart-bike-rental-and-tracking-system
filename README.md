@@ -9,7 +9,7 @@ The entire system is deployed on Render
 🔗 Live Demo:  
 https://smart-bike-rental-and-tracking-system.onrender.com
 
----
+
 
 📘 About This Project
 
@@ -26,7 +26,7 @@ It demonstrates full-stack software engineering skills including:
 
 This is suitable as a Software Engineering, Full-Stack, or Backend Engineering portfolio project.
 
----
+
 
  ⭐ Features
 
@@ -57,7 +57,7 @@ Collections include:
 
 All operations update the database in real-time.
 
----
+
 
  🛠️ Tech Stack
 
@@ -77,9 +77,9 @@ All operations update the database in real-time.
 - Render (Cloud Hosting)  
 - Node.js Runtime  
 
----
 
-## 📂 Folder Structure
+
+ 📂 Folder Structure
 
 Smart bike rental and tracking system/
 │── server.js
