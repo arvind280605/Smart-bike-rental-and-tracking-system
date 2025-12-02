@@ -11,7 +11,7 @@ https://smart-bike-rental-and-tracking-system.onrender.com
 
 
 
-📘 About This Project
+ About This Project
 
 This project simulates a real-world bike rental system with 5 predefined stations.  
 Instead of external APIs or GPS tracking, bike availability and station updates are handled through backend logic and MongoDB collections.
@@ -28,26 +28,26 @@ This is suitable as a Software Engineering, Full-Stack, or Backend Engineering p
 
 
 
- ⭐ Features
+  Features
 
-👤 User Features
+ User Features
 - User Registration & Login  
 - Profile view and edit  
 - Ride history tracking  
 
-🚲 Rental Features
+ Rental Features
 - View 5 predefined bike stations  
 - Check bike availability per station  
 - Rent a bike from any station  
 - Return the bike to any selected station  
 - Real-time bike count updates (via MongoDB)
 
-💳 Dashboard & Payment
+ Dashboard & Payment
 - Dashboard showing current rental details  
 - Basic payment workflow simulation  
 - User ride insights  
 
-🗄 Database (MongoDB)
+ Database (MongoDB)
 Collections include:
 - users  
 - bikes  
@@ -59,27 +59,27 @@ All operations update the database in real-time.
 
 
 
- 🛠️ Tech Stack
+  Tech Stack
 
-🎨 Frontend
-- HTML5  
-- CSS3  
-- JavaScript (Vanilla)
+ Frontend
+ HTML5  
+ CSS3  
+ JavaScript (Vanilla)
 
-🧩 Backend
+ Backend
 - Node.js  
 - Express.js  
 
-🗃️ Database
+ Database
 - MongoDB (Local / MongoDB Atlas)
 
-🌐 Deployment
+ Deployment
 - Render (Cloud Hosting)  
 - Node.js Runtime  
 
 
 
- 📂 Folder Structure
+  Folder Structure
 
 Smart bike rental and tracking system/
 │── server.js
@@ -102,33 +102,33 @@ Smart bike rental and tracking system/
 
 
 
- 🚀 Run Locally (Development Setup)
+  Run Locally (Development Setup)
 
-1️⃣ Clone the repository
+ Clone the repository
 
 git clone https://github.com/YOUR-USERNAME/Smart-Bike-Rental-System.git
 
 cd Smart-Bike-Rental-System
 
-2️⃣ Install dependencies
+ Install dependencies
 
 npm install
 
-3️⃣ Configure MongoDB
+ Configure MongoDB
 
 Update your MongoDB connection string in server.js:
 
 const uri = "your-mongodb-connection-string";
 
-4️⃣ Start the server
+ Start the server
 
 node server.js
 
-5️⃣ Open in browser
+ Open in browser
 
 http://localhost:3000
 
-🌐 Deployment (Render)
+ Deployment (Render)
 
 This application is live on Render.
 
