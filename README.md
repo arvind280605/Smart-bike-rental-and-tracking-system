@@ -1,4 +1,4 @@
-🚲 Smart Bike Rental & Tracking System  
+Smart Bike Rental & Tracking System  
  Full-Stack Software Project | Node.js, Express, MongoDB | Deployed on Render
 
 A complete **full-stack software application** for managing a bike rental system with multiple stations.  
@@ -6,7 +6,7 @@ Users can register, log in, view available bikes at each station, rent a bike, r
 The backend is built using Node.js + Express, the frontend uses HTML/CSS/JavaScript, and all data is stored in MongoDB.  
 The entire system is deployed on Render
 
-🔗 Live Demo:  
+ Live Demo:  
 https://smart-bike-rental-and-tracking-system.onrender.com
 
 
@@ -132,7 +132,7 @@ http://localhost:3000
 
 This application is live on Render.
 
-🔗 Live URL:
+ Live URL:
 https://smart-bike-rental-and-tracking-system.onrender.com
 
 Render automatically:
